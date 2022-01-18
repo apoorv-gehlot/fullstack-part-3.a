@@ -33,3 +33,9 @@ Add the morgan middleware to your application for logging. Configure it to log m
 
 ## 3.8*: Phonebook backend step8
 Configure morgan so that it also shows the data sent in HTTP POST requests
+
+# Exercises 3.9.-3.11.
+
+## 3.9 phonebook backend step9
+Make the backend work with the frontend from the previous part.
+Added Cross Origin Resource Sharing (CORS) middleware in backend.
