@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://src/index.css"],"names":[],"mappings":"AAAA,GAEI,iBACJ,CAEA,YAJI,WAMJ,CAEA,OACI,SACJ","file":"main.fb2f81f7.chunk.css","sourcesContent":["h1 {\r\n    color: green;\r\n    font-style: italic;\r\n}\r\n\r\n.success {\r\n    color: green;\r\n}\r\n\r\n.error{\r\n    color: red;\r\n}"]}
