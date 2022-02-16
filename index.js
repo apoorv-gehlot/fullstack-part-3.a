@@ -1,6 +1,8 @@
+require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
+const Person = require('./models/person')
 
 const app = express()
 
@@ -21,29 +23,6 @@ app.use(express.json())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
 app.use(express.static('build'))
 
-let persons = [
-    {
-        "id": 1,
-        "name": "Arto Hellas",
-        "number": "040-123456"
-    },
-    {
-        "id": 2,
-        "name": "Ada Lovelace",
-        "number": "39-44-5323523"
-    },
-    {
-        "id": 3,
-        "name": "Dan Abramov",
-        "number": "12-43-234345"
-    },
-    {
-        "id": 4,
-        "name": "Mary Poppendieck",
-        "number": "39-23-6423122"
-    }
-]
-
 /**
  * Method to generate random number between 1-100
  * 
@@ -54,32 +33,59 @@ const generateId = () => {
 }
 
 app.get('/api/persons', (request, response) => {
-    response.json(persons)
+    Person.find({}).then(persons =>{
+        response.json(persons)
+    })
 })
 
 app.get('/api/info', (request, response) => {
-    const lenght = persons.length
-    const timestamp = new Date()
-    response.send(`Phonebook has information for ${lenght} people </br></br> ${timestamp} `)
+    Person.find({}).then(persons =>{
+        if(persons.length){
+            const length = persons.length
+            const timestamp = new Date()
+            response.send(`Phonebook has information for ${length} people </br></br> ${timestamp} `)
+        } else {
+            response.send('Phonebook is empty!')
+        }
+    })
+    
 })
 
 app.get('/api/persons/:id', (request, response) => {
     // The param from request is of string type, transform in to number before matching.
     const personId = Number(request.params.id)
-    const person = persons.find(p => p.id === personId)
 
-    // If person is not found return 404 'Not Found' error
-    if (person)
-        response.json(person)
-    else
-        response.status(404).end()
+    Person.findById(personId)
+    .then(person =>{
+        if(person)
+            response.json(person)
+        else
+            response.status(404).end()
+
+        // mongoose.connection.close()
+    }).catch(error =>{
+        console.log(error)
+        // mongoose.connection.close()
+    })
 })
 
 app.delete('/api/persons/:id', (request, response) => {
     const personId = Number(request.params.id)
-    persons = persons.filter(p => p.id !== personId)
 
-    response.status(204).end()
+    Person.findByIdAndDelete(personId)
+    .then(person =>{
+        if(person){
+            console.log(`Deleted Person: ${person} successfully!`)
+            response.status(204).end()
+        }else{
+            console.log(person)
+            response.status(404).end()
+        }
+        // mongoose.connection.close()
+    }).catch(error=>{
+        console.log(error)
+        // mongoose.connection.close()
+    })
 })
 
 app.post('/api/persons', (request, response) => {
@@ -92,16 +98,24 @@ app.post('/api/persons', (request, response) => {
         })
     }
 
-    let newPerson = {
-        id: generateId(),
+    // declaring Person object with values
+    let newPerson = new Person({
+        _id: generateId(),
         name: body.name,
         number: body.number
-    }
-    persons = persons.concat(newPerson)
-    response.json(newPerson)
+    })
+
+    newPerson.save().then(person =>{
+        console.log('Person saved successfully!')
+        // mongoose.connection.close()
+        response.json(person)
+    }).catch((error) =>{
+        console.error('Error while saving person data.', error.message)
+        // mongoose.connection.close()
+    })
 })
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)
 })

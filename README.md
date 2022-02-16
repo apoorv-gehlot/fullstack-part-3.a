@@ -39,3 +39,28 @@ Configure morgan so that it also shows the data sent in HTTP POST requests
 ## 3.9 phonebook backend step9
 Make the backend work with the frontend from the previous part.
 Added Cross Origin Resource Sharing (CORS) middleware in backend.
+
+## 3.10 phonebook backend step10
+Deploy the backend to the internet, for example to Heroku.
+
+## 3.11 phonebook full stack
+Generate a production build of your frontend, and add it to the internet application using the method introduced in this part.
+
+## 3.12: Command-line database
+Create a cloud-based MongoDB database for the phonebook application with MongoDB Atlas.
+Create a mongo.js file in the project directory, that can be used for adding entries to the phonebook, and for listing all of the existing entries in the phonebook.
+
+# Exercises 3.13.-3.14.
+The following exercises are pretty straightforward, but if your frontend stops working with the backend, then finding and fixing the bugs can be quite interesting.
+
+## 3.13: Phonebook database, step1
+Change the fetching of all phonebook entries so that the data is fetched from the database.
+
+Verify that the frontend works after the changes have been made.
+
+In the following exercises, write all Mongoose-specific code into its own module, just like we did in the chapter Database configuration into its own module.
+
+## 3.14: Phonebook database, step2
+Change the backend so that new numbers are saved to the database. Verify that your frontend still works after the changes.
+
+At this point, you can choose to simply allow users to create all phonebook entries. At this stage, the phonebook can have multiple entries for a person with the same name.
