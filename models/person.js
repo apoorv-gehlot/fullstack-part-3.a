@@ -12,15 +12,24 @@ mongoose.connect(MONGODB_URI).then((result) => {
 })
 
 /**
- * Person schema where person name is a mandatory field
+ * Person schema where person name is a mandatory field.
+ * Custom validation is applied for the phone number.
  */
 const personSchema = mongoose.Schema({
-    _id: Number,
     name: {
         type: String,
+        minLength: [3, 'Cannot be less than 3'],
         required: true
     },
-    number: String
+    number: {
+        type: String,
+        validate: {
+            validator: function (v) {
+                return /\d{2}-\d{9}/.test(v)
+            },
+            message: props => `'${props.value}' is not a valid phone number!`
+        }
+    }
 });
 
 /**
@@ -29,8 +38,8 @@ const personSchema = mongoose.Schema({
  */
 personSchema.set('toJSON', {
     transform: (document, returnedObject) => {
-        // returnedObject.id = returnedObject.id.toString()
-        // delete returnedObject._id
+        returnedObject.id = returnedObject._id.toString()
+        delete returnedObject._id
         delete returnedObject.__v
     }
 })
