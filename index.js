@@ -12,14 +12,6 @@ app.use(cors())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
 app.use(express.static('build'))
 
-/**
- * Method to generate random number between 1-100
- * 
- * @returns 
- */
-// const generateId = () => {
-//     return Math.floor(Math.random() * 100)
-// }
 
 app.get('/api/persons', (request, response, next) => {
     Person.find({})
